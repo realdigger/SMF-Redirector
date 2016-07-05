@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info">
+
+    <id>digger:redirector</id>
+    <name>Redirector</name>
+    <type>modification</type>
+    <version>1.1.1</version>
+
+    <install for="2.0 - 2.1.99">
+        <require-dir name="Themes" destination="$boarddir"/>
+        <require-dir name="Sources" destination="$boarddir"/>
+        <code>add_settings.php</code>
+        <code>hooks.php</code>
+        <redirect url="?action=admin;area=modsettings;sa=redirector"/>
+    </install>
+
+    <uninstall for="2.0 - 2.1.99">
+        <remove-dir name="$languagedir/Redirector"/>
+        <remove-file name="$sourcedir/Mod-Redirector.php"/>
+        <code>hooks.php</code>
+    </uninstall>
+
+</package-info>
