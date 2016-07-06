@@ -5,7 +5,7 @@
     <id>digger:redirector</id>
     <name>Redirector</name>
     <type>modification</type>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 
     <install for="2.0 - 2.1.99">
         <require-dir name="Themes" destination="$boarddir"/>

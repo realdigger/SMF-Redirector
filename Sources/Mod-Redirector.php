@@ -178,7 +178,22 @@ function addRedirectorCopyright()
  */
 function showRedirectorPage()
 {
+    global $modSettings, $scripturl, $context, $txt, $boardurl;
 
+    $link = ($_GET['url']);
+    $link = (base64_decode($link));
+
+    if (!empty($modSettings['redirector_check_referer'])) {
+        header('Location: ' . $boardurl);
+        exit;
+    } elseif ($modSettings['redirector_mode'] == 'immediate') {
+        header('Location: ' . $link);
+        exit;
+    } // if it is in settings - use automatic redirection after delay
+    elseif ($modSettings['redirector_mode'] == 'delayed') {
+        header('Refresh: ' . $modSettings['redirector_delay'] . '; url=' . $link);
+        exit;
+    }
 }
 
 
