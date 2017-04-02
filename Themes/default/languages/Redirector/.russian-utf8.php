@@ -20,4 +20,6 @@ $txt['redirector_delay'] = 'Задержка в секундах';
 $txt['redirector_whitelist'] = 'Белый список доменов';
 $txt['redirector_whitelist_sub'] = 'По одному домену в строке';
 $txt['redirector_page_title'] = 'Перенаправление по внешней ссылке';
+$txt['redirector_hide_guest_links'] = 'Скрывать ссылки от гостей (кроме белого списка)';
+$txt['redirector_hide_guest_message'] = '[Войдите или зарегистрируйтесь]';
 $txt['whoall_go'] = 'Переходит по внешней ссылке';
