@@ -3,10 +3,7 @@
  * Project: SMF Redirector
  * Version: 1.0
  * Author: digger http://mysmf.ru
- * License: CC BY-NC-ND http://creativecommons.org/licenses/by-nc-nd/4.0/
- *
- * To run this install manually please make sure you place this
- * in the same place and SSI.php and index.php
+ * License: The MIT License (MIT)
  */
 
 if (!defined('SMF')) {
@@ -24,7 +21,7 @@ function loadRedirectorHooks()
     add_integration_function('integrate_modify_modifications', 'addRedirectorAdminAction', false);
     add_integration_function('integrate_menu_buttons', 'addRedirectorCopyright', false);
 
-    if (empty($modSettings['redirector_enabled'])) {
+    if (empty($modSettings['redirector_enabled']) && empty($modSettings['redirector_hide_guest_links'])) {
         return;
     }
 
@@ -41,7 +38,7 @@ function loadRedirectorHooks()
 function addRedirectorAdminArea(&$admin_areas)
 {
     global $txt;
-    loadLanguage('Redirector/');
+    loadLanguage('Redirector/Redirector');
 
     $admin_areas['config']['areas']['modsettings']['subsections']['redirector'] = array($txt['redirector_admin_menu']);
 }
@@ -75,7 +72,7 @@ function addRedirectorAction(&$actionArray = array())
 function addRedirectorAdminSettings($return_config = false)
 {
     global $txt, $scripturl, $context;
-    loadLanguage('Redirector/');
+    loadLanguage('Redirector/Redirector');
 
     $context['page_title'] = $context['settings_title'] = $txt['redirector_admin_menu'];
     $context['post_url'] = $scripturl . '?action=admin;area=modsettings;save;sa=redirector';
@@ -83,16 +80,17 @@ function addRedirectorAdminSettings($return_config = false)
     $config_vars = array(
         array('check', 'redirector_enabled'),
         array('check', 'redirector_guest_only'),
+        array('check', 'redirector_hide_guest_links'),
         //array('check', 'redirector_check_referer'),
-        /*
-        array('select', 'redirector_mode',
+        array(
+            'select',
+            'redirector_mode',
             array(
                 'immediate' => $txt['redirector_mode_immediate'],
                 'delayed' => $txt['redirector_mode_delayed'],
             ),
         ),
         array('int', 'redirector_delay'),
-        */
         array('large_text', 'redirector_whitelist', 'subtext' => $txt['redirector_whitelist_sub']),
     );
 
@@ -156,7 +154,11 @@ function getRedirectorUrl($url = '')
         return $url;
     }
 
-    return $scripturl . '?action=go;url=' . (base64_encode($url));
+    if (!empty($modSettings['redirector_hide_guest_links']) && !empty($context['user']['is_guest'])) {
+        return $scripturl . '?action=login';
+    } else {
+        return $scripturl . '?action=go;url=' . (base64_encode($url));
+    }
 }
 
 
@@ -168,7 +170,7 @@ function addRedirectorCopyright()
     global $context;
 
     if ($context['current_action'] == 'credits') {
-        $context['copyrights']['mods'][] = '<a href="http://mysmf.ru/mods/redirector" target="_blank">Redirector</a> &copy; 2015-2016, digger';
+        $context['copyrights']['mods'][] = '<a href="http://mysmf.ru/mods/redirector" target="_blank">Redirector</a> &copy; 2015-2017, digger';
     }
 }
 
@@ -181,7 +183,7 @@ function showRedirectorPage()
     global $modSettings, $scripturl, $context, $txt, $boardurl;
 
     $link = ($_GET['url']);
-    $link = (base64_decode($link));
+    $link = str_replace('&amp;', '&', base64_decode($link)); // TODO: Fix for & in links
 
     if (!empty($modSettings['redirector_check_referer'])) {
         header('Location: ' . $boardurl);
@@ -206,22 +208,43 @@ function changeRedirectorUrlTag(&$codes = array())
     foreach ($codes as $codeId => $code) {
         if ($code['tag'] == 'url' && $code['type'] == 'unparsed_content') {
             $codes[$codeId]['validate'] = create_function('&$tag, &$data, $disabled', '
+                    global $txt, $modSettings, $context;
+                    loadLanguage(\'Redirector/Redirector\');
+                    
 					$data = strtr($data, array(\'<br />\' => \'\'));
-					$link = $data;
-					
+					$link = $data;				
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)				
-						$data = \'http://\' . $data;
-						$data = getRedirectorUrl($data);
-						$tag[\'content\'] = \'<a href="\' . $data . \'" class="bbc_link" target="_blank">\' . $link . \'</a>\';						
+						$data = \'http://\' . $data;						
+					$data = getRedirectorUrl($data);
+
+					// Hide links from guests
+					if (!empty($modSettings[\'redirector_hide_guest_links\']) && !empty($context[\'user\'][\'is_guest\'])) $link = $txt[\'redirector_hide_guest_message\'];
+					
+					$tag[\'content\'] = \'<a href="\' . $data . \'" class="bbc_link" target="_blank">\' . $link . \'</a>\';						
 				');
         } elseif ($code['tag'] == 'url' && $code['type'] == 'unparsed_equals') {
             $codes[$codeId]['validate'] = create_function('&$tag, &$data, $disabled', '
-					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
+					global $txt;
+                    loadLanguage(\'Redirector/Redirector\');		
+                    
+					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)					
 						$data = \'http://\' . $data;
 						
 						$href = getRedirectorUrl($data);
-						$tag[\'before\'] = \'<a href="\' . $href . \'" class="bbc_link" target="_blank">\';
-						$tag[\'after\'] = \'</a>\';
+						//$href = \'\';
+
+						//$tag[\'type\'] = \'unparsed_content\';
+						$tag[\'content\'] = $txt[\'redirector_hide_guest_message\'];
+						$tag[\'disabled_content\'] = $txt[\'redirector_hide_guest_message\'];
+						
+						//disabled_before
+						
+					    //$tag[\'before\'] = \'<a href="\' . $href . \'" class="bbc_link" target="_blank">\';
+						//$tag[\'after\'] = \'\';
+						
+						//$tag[\'before\'] = \'<a href="\' . $href . \'" class="bbc_link" target="_blank">\';
+						//$tag[\'after\'] = \'</a>\';
+						//var_dump($tag);
 				');
         } elseif ($code['tag'] == 'iurl' && $code['type'] == 'unparsed_content') {
             $codes[$codeId]['validate'] = create_function('&$tag, &$data, $disabled', '
