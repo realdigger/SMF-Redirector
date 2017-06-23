@@ -1,14 +1,15 @@
 <?php
 /**
- * Project: SMF Redirector
- * Version: 1.0
- * Author: digger http://mysmf.ru
- * License: CC BY-NC-ND http://creativecommons.org/licenses/by-nc-nd/4.0/
- *
- * To run this install manually please make sure you place this
- * in the same place and SSI.php and index.php
+ * @package SMF Redirector
+ * @file Redirector.english.php
+ * @author digger <digger@mysmf.ru> <http://mysmf.ru>
+ * @copyright Copyright (c) 2015-2017, digger
+ * @license The MIT License (MIT) https://opensource.org/licenses/MIT
+ * @version 1.2
  */
 
+$txt['redirector_description'] = 'Redirect and hiding for external links. You should add to your robots.txt file<br> 
+Disallow: /*action=go;';
 $txt['redirector_admin_menu'] = 'Links Redirector';
 $txt['redirector_enabled'] = 'Enable redirect';
 $txt['redirector_guest_only'] = 'For guests only';
@@ -20,6 +21,8 @@ $txt['redirector_delay'] = 'Delay for seconds';
 $txt['redirector_whitelist'] = 'Domains white list';
 $txt['redirector_whitelist_sub'] = 'One domain on every row';
 $txt['redirector_page_title'] = 'Redirect to external link';
-$txt['redirector_hide_guest_links'] = 'Hide links for guests (exept white list)';
+$txt['redirector_hide_links_title'] = 'Hide links';
+$txt['redirector_hide_guest_links'] = 'Hide links (exept white list) for guests';
 $txt['redirector_hide_guest_message'] = '[Login or Register]';
+$txt['redirector_hide_guest_custom_message'] = 'Message to show when link is hided';
 $txt['whoall_go'] = 'Go to external link';

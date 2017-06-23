@@ -1,13 +1,13 @@
 [b]SMF Redirector mod[/b]
 
-Author: digger http://mysmf.ru
+Author: digger [url]http://mysmf.ru[/url]
 License: The MIT License (MIT)
 Hooks only: Yes
 Compatible with: SMF 2.0, SMF 2.1
 Languages: English, Russian
-Github: [url]https://github.com/realdigger/SMF-Redirector[/url]
+GitHub: [url]https://github.com/realdigger/SMF-Redirector[/url]
 
-Redirect for external links.
+Redirect for external links. Hide links from guests.
 
 Features:
 * External links redirection
@@ -17,10 +17,8 @@ Features:
 * Hide links for guests
 * Delayed or instantly redirection
 * Domains white list
-    
 [hr]
-
-Редирект внешних ссылок в сообщениях на форуме.
+Редирект внешних ссылок в сообщениях на форуме. Скрытие ссылок от гостей.
 
 Возможности:
 * Редирект для внешних ссылок

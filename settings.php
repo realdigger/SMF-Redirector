@@ -1,15 +1,17 @@
 <?php
 /**
- * Project: SMF Redirector
- * Version: 1.0
- * Author: digger http://mysmf.ru
- * License: CC BY-NC-ND http://creativecommons.org/licenses/by-nc-nd/4.0/
+ * @package SMF Redirector
+ * @file add_settings.php
+ * @author digger <digger@mysmf.ru> <http://mysmf.ru>
+ * @copyright Copyright (c) 2015-2017, digger
+ * @license The MIT License (MIT) https://opensource.org/licenses/MIT
+ * @version 1.2
  *
  * To run this install manually please make sure you place this
  * in the same place and SSI.php and index.php
  */
 
-global $context, $user_info;
+global $context, $user_info, $boardurl;
 
 if (file_exists(dirname(__FILE__) . '/SSI.php') && !defined('SMF')) {
     require_once(dirname(__FILE__) . '/SSI.php');
@@ -28,7 +30,9 @@ $mod_settings = array(
     'redirector_check_referer' => 0,
     'redirector_mode' => 'immediate',
     'redirector_delay' => 5,
-    'redirector_whitelist' => 'localhost',
+    'redirector_whitelist' => parse_url($boardurl, PHP_URL_HOST) . "\nlink.tapatalk.com\nyoutu.be\nyoutube.com\nwww.youtube.com",
+    'redirector_hide_guest_links' => 0,
+    'redirector_hide_guest_custom_message' => '',
 );
 
 // Update mod settings if applicable

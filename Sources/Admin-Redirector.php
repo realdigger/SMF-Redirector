@@ -8,7 +8,6 @@
  * @version 1.2
  */
 
-
 /**
  * Add mod admin area
  * @param $admin_areas
@@ -21,7 +20,6 @@ function addRedirectorAdminArea(&$admin_areas)
     $admin_areas['config']['areas']['modsettings']['subsections']['redirector'] = array($txt['redirector_admin_menu']);
 }
 
-
 /**
  * Add mod admin action
  * @param $subActions
@@ -30,7 +28,6 @@ function addRedirectorAdminAction(&$subActions)
 {
     $subActions['redirector'] = 'addRedirectorAdminSettings';
 }
-
 
 /**
  * Add mod settings area
@@ -50,7 +47,7 @@ function addRedirectorAdminSettings($return_config = false)
         array('title', 'redirector_admin_menu'),
         array('check', 'redirector_enabled'),
         array('check', 'redirector_guest_only'),
-        //array('check', 'redirector_check_referer'),
+
         array(
             'select',
             'redirector_mode',

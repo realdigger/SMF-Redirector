@@ -5,19 +5,21 @@
     <id>digger:redirector</id>
     <name>Redirector</name>
     <type>modification</type>
-    <version>1.1.3</version>
+    <version>1.2</version>
 
     <install for="2.0 - 2.1.99">
+        <readme parsebbc="true">README.bbc</readme>
         <require-dir name="Themes" destination="$boarddir"/>
         <require-dir name="Sources" destination="$boarddir"/>
-        <code>add_settings.php</code>
-        <code>hooks.php</code>
+        <database>settings.php</database>
+        <database>hooks.php</database>
         <redirect url="?action=admin;area=modsettings;sa=redirector"/>
     </install>
 
     <uninstall for="2.0 - 2.1.99">
         <remove-dir name="$languagedir/Redirector"/>
         <remove-file name="$sourcedir/Mod-Redirector.php"/>
+        <remove-file name="$sourcedir/Admin-Redirector.php"/>
         <code>hooks.php</code>
     </uninstall>
 
