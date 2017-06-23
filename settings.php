@@ -27,7 +27,6 @@ if ((SMF == 'SSI') && !$user_info['is_admin']) {
 $mod_settings = array(
     'redirector_enabled' => 0,
     'redirector_guest_only' => 0,
-    'redirector_check_referer' => 0,
     'redirector_mode' => 'immediate',
     'redirector_delay' => 5,
     'redirector_whitelist' => parse_url($boardurl, PHP_URL_HOST) . "\nlink.tapatalk.com\nyoutu.be\nyoutube.com\nwww.youtube.com",

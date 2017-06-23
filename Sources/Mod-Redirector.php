@@ -161,7 +161,8 @@ function changeRedirectorUrlTag(&$codes = array())
     }
 }
 
-/** Parse unparsed content tag
+/**
+ * Parse unparsed content tag
  * @param $tag
  * @param $data
  */
@@ -176,12 +177,12 @@ function changeUrlUnparsedContentCode(&$tag, $data)
         $data = 'http://' . $data;
     }
 
-    $data = getRedirectorUrl($data);
-
     // Hide links from guests
     if (!empty($modSettings['redirector_hide_guest_links']) && !empty($context['user']['is_guest']) && !checkWhiteList($data)) {
         $link_text = !empty($modSettings['redirector_hide_guest_custom_message']) ? $modSettings['redirector_hide_guest_custom_message'] : $txt['redirector_hide_guest_message'];
     }
+
+    $data = getRedirectorUrl($data);
 
     $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
 }
