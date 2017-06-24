@@ -173,8 +173,14 @@ function changeUrlUnparsedContentCode(&$tag, $data)
 
     $data = strtr($data, array('<br />' => ''));
     $link_text = $data;
-    if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0) {
-        $data = 'http://' . $data;
+
+    // Skip local urls with #
+    if (strpos($data, '#') === 0) {
+        return;
+    } else {
+        if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0) {
+            $data = 'http://' . $data;
+        }
     }
 
     // Hide links from guests
@@ -197,8 +203,14 @@ function changeUrlUnparsedEqualsCode(&$tag, $data)
     global $txt, $modSettings, $context;
     loadLanguage('Redirector/Redirector');
 
-    if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0) {
-        $data = 'http://' . $data;
+
+    // Skip local urls with #
+    if (strpos($data, '#') === 0) {
+        return;
+    } else {
+        if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0) {
+            $data = 'http://' . $data;
+        }
     }
 
     $href = getRedirectorUrl($data);

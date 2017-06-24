@@ -22,7 +22,7 @@ Redirect for external links. Hide links from guests.
     
 ![redirector_en](https://cloud.githubusercontent.com/assets/1187218/24588092/c656782e-17d2-11e7-801e-644d26b6ae38.png)
 
-### Установка
+## Установка
    Загрузите и установите файл tar.gz актуальной версии со [страницы загрузок](https://github.com/realdigger/SMF-Redirector/releases).
 
 ## Описание
