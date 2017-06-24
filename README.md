@@ -1,3 +1,4 @@
+![](https://travis-ci.org/realdigger/SMF-Redirector.svg?branch=master)
 # SMF Redirector mod
 * **Author:** digger [http://mysmf.ru](http://mysmf.ru)
 * **License:** The MIT License (MIT)
