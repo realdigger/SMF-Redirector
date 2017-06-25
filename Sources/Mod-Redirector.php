@@ -166,7 +166,7 @@ function changeRedirectorUrlTag(&$codes = array())
  * @param $tag
  * @param $data
  */
-function changeUrlUnparsedContentCode(&$tag, $data)
+function changeUrlUnparsedContentCode(&$tag, &$data)
 {
     global $txt, $modSettings, $context;
     loadLanguage('Redirector/Redirector');
@@ -198,14 +198,14 @@ function changeUrlUnparsedContentCode(&$tag, $data)
  * @param $tag
  * @param $data
  */
-function changeUrlUnparsedEqualsCode(&$tag, $data)
+function changeUrlUnparsedEqualsCode(&$tag, &$data)
 {
     global $txt, $modSettings, $context;
     loadLanguage('Redirector/Redirector');
 
-
-    // Skip local urls with #
-    if (strpos($data, '#') === 0) {
+    // Anchor tag
+    if (substr($data, 0, 1) == '#') {
+        $data = '#post_' . substr($data, 1);
         return;
     } else {
         if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0) {
