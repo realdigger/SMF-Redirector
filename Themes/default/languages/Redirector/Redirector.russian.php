@@ -26,3 +26,4 @@ $txt['redirector_hide_guest_links'] = 'Скрывать ссылки (кроме белого списка) от 
 $txt['redirector_hide_guest_message'] = '[Войдите или зарегистрируйтесь]';
 $txt['redirector_hide_guest_custom_message'] = 'Сообщение отображаемое вместо скрытой от гостя ссылки';
 $txt['whoall_go'] = 'Переходит по внешней ссылке';
+$txt['redirector_nofollow_links'] = 'Добавить к ссылкам rel="nofollow"';

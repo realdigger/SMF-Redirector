@@ -46,6 +46,7 @@ function addRedirectorAdminSettings($return_config = false)
     $config_vars = array(
         array('title', 'redirector_admin_menu'),
         array('check', 'redirector_enabled'),
+        array('check', 'redirector_nofollow_links'),
         array('check', 'redirector_guest_only'),
 
         array(

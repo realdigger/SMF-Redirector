@@ -25,7 +25,7 @@ function loadRedirectorHooks()
     add_integration_function('integrate_admin_areas', 'addRedirectorAdminArea', false);
     add_integration_function('integrate_modify_modifications', 'addRedirectorAdminAction', false);
 
-    if (empty($modSettings['redirector_enabled']) && empty($modSettings['redirector_hide_guest_links'])) {
+    if (empty($modSettings['redirector_enabled']) && empty($modSettings['redirector_hide_guest_links']) && empty($modSettings['redirector_nofollow_links'])) {
         return;
     }
 
@@ -82,9 +82,14 @@ function getRedirectorUrl($url = '')
 
     if (!empty($modSettings['redirector_hide_guest_links']) && !empty($context['user']['is_guest'])) {
         return $scripturl . '?action=login';
-    } else {
-        return $scripturl . '?action=go;url=' . (base64_encode($url));
     }
+
+    if (!empty($modSettings['redirector_enabled'])) {
+        return $scripturl . '?action=go;url=' . (base64_encode($url));
+    } else {
+        return $url;
+    }
+
 }
 
 /**
@@ -190,7 +195,7 @@ function changeUrlUnparsedContentCode(&$tag, &$data)
 
     $data = getRedirectorUrl($data);
 
-    $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
+    $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . (!empty($modSettings['redirector_nofollow_links']) ? 'rel="nofollow" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
 }
 
 /**
@@ -215,7 +220,7 @@ function changeUrlUnparsedEqualsCode(&$tag, &$data)
 
     $href = getRedirectorUrl($data);
 
-    $tag['before'] = '<a href="' . $href . '" class="bbc_link" ' . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >';
+    $tag['before'] = '<a href="' . $href . '" class="bbc_link" ' . (!empty($modSettings['redirector_nofollow_links']) ? 'rel="nofollow" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >';
     $tag['after'] = '</a>';
 
     // Hide links from guests
