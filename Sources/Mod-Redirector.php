@@ -195,7 +195,7 @@ function changeUrlUnparsedContentCode(&$tag, &$data)
 
     $data = getRedirectorUrl($data);
 
-    $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . (!empty($modSettings['redirector_nofollow_links']) ? 'rel="nofollow" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
+    $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList($data)) ? 'rel="nofollow" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
 }
 
 /**
@@ -220,7 +220,7 @@ function changeUrlUnparsedEqualsCode(&$tag, &$data)
 
     $href = getRedirectorUrl($data);
 
-    $tag['before'] = '<a href="' . $href . '" class="bbc_link" ' . (!empty($modSettings['redirector_nofollow_links']) ? 'rel="nofollow" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >';
+    $tag['before'] = '<a href="' . $href . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList($data)) ? 'rel="nofollow" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >';
     $tag['after'] = '</a>';
 
     // Hide links from guests
