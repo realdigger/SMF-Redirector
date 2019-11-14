@@ -26,4 +26,4 @@ $txt['redirector_hide_guest_links'] = 'Hide links (exept white list) for guests'
 $txt['redirector_hide_guest_message'] = '[Login or Register]';
 $txt['redirector_hide_guest_custom_message'] = 'Message to show when link is hided';
 $txt['whoall_go'] = 'Go to external link';
-$txt['redirector_nofollow_links'] = 'Add rel="nofollow" for links';
+$txt['redirector_nofollow_links'] = 'Add rel="nofollow noopener" for links';

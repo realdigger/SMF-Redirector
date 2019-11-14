@@ -119,7 +119,7 @@ function addRedirectorCopyright()
     global $context;
 
     if ($context['current_action'] == 'credits') {
-        $context['copyrights']['mods'][] = '<a href="http://mysmf.net/mods/redirector" target="_blank">Redirector</a> &copy; 2015-2017, digger';
+        $context['copyrights']['mods'][] = '<a href="https://mysmf.net/mods/redirector" target="_blank">Redirector</a> &copy; 2015-2019, digger';
     }
 }
 
@@ -128,7 +128,8 @@ function addRedirectorCopyright()
  */
 function showRedirectorPage()
 {
-    global $modSettings;
+    global $modSettings, $context, $txt;
+    loadLanguage('Redirector/Redirector');
 
     $link = ($_GET['url']);
     $link = str_replace('&amp;', '&', base64_decode($link));
@@ -138,8 +139,16 @@ function showRedirectorPage()
         exit;
     } // if it is in settings - use automatic redirection after delay
     elseif ($modSettings['redirector_mode'] == 'delayed') {
-        header('Refresh: ' . $modSettings['redirector_delay'] . '; url=' . $link);
+        header('Refresh: ' . $modSettings['redirector_delay'] . '; url=' . mimespecialchars($link));
         exit;
+/*
+        $context['page_title'] = $txt['redirector_page_title'];
+
+        $context['linktree'][] = array(
+            'url' => $_SERVER['PHP_SELF'],
+            'name' => $txt['redirector_page_title'],
+        );
+*/
     }
 }
 
@@ -195,7 +204,7 @@ function changeUrlUnparsedContentCode(&$tag, &$data)
 
     $data = getRedirectorUrl($data);
 
-    $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList($data)) ? 'rel="nofollow" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
+    $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList($data)) ? 'rel="nofollow noopener" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
 }
 
 /**
@@ -220,7 +229,7 @@ function changeUrlUnparsedEqualsCode(&$tag, &$data)
 
     $href = getRedirectorUrl($data);
 
-    $tag['before'] = '<a href="' . $href . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList($data)) ? 'rel="nofollow" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >';
+    $tag['before'] = '<a href="' . $href . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList($data)) ? 'rel="nofollow noopener" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >';
     $tag['after'] = '</a>';
 
     // Hide links from guests

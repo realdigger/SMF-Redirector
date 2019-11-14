@@ -26,7 +26,7 @@ Redirect for external links. Hide links from guests.
 * Hide links for guests
 * Delayed or instantly redirection
 * Domains white list
-* Rel="nofollow" for external links
+* Rel="nofollow noopener" for external links
     
 ![redirector_en](https://cloud.githubusercontent.com/assets/1187218/24588092/c656782e-17d2-11e7-801e-644d26b6ae38.png)
 
@@ -44,6 +44,6 @@ Redirect for external links. Hide links from guests.
 * Скрытие ссылок от гостей
 * Выбор режима редиректа - немедленный или с задержкой
 * Белый список доменов
-* Rel="nofollow" для внешних ссылок
+* Rel="nofollow noopener" для внешних ссылок
 
 ![redirector_ru](https://cloud.githubusercontent.com/assets/1187218/24588093/c65707ee-17d2-11e7-9d34-3e43fa40be69.png)
