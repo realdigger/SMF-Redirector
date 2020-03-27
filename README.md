@@ -28,7 +28,7 @@ Redirect for external links. Hide links from guests.
 * Domains white list
 * Rel="nofollow noopener" for external links
     
-![redirector_en](https://user-images.githubusercontent.com/1187218/77807435-42bdc500-70a1-11ea-81e7-9f8e8c556590.png)
+![redirector_en](https://user-images.githubusercontent.com/1187218/77808218-e6a87000-70a3-11ea-9dc0-5f5d336d4fea.png)
 
 ## Установка
    Загрузите и установите файл tar.gz актуальной версии со [страницы загрузок](https://github.com/realdigger/SMF-Redirector/releases).
@@ -46,4 +46,4 @@ Redirect for external links. Hide links from guests.
 * Белый список доменов
 * Rel="nofollow noopener" для внешних ссылок
 
-![redirector_ru](https://user-images.githubusercontent.com/1187218/77807438-43565b80-70a1-11ea-890b-8bb479be4cb2.png)
+![redirector_ru](https://user-images.githubusercontent.com/1187218/77808219-e7d99d00-70a3-11ea-9919-74c32b536132.png)
