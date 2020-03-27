@@ -5,7 +5,7 @@
     <id>digger:redirector</id>
     <name>Redirector</name>
     <type>modification</type>
-    <version>1.2.4</version>
+    <version>1.2.5</version>
 
     <install for="2.0 - 2.1.99">
         <readme parsebbc="true">README.bbc</readme>

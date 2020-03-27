@@ -128,7 +128,7 @@ function addRedirectorCopyright()
  */
 function showRedirectorPage()
 {
-    global $modSettings, $context, $txt;
+    global $modSettings, $sourcedir, $context, $txt;
     loadLanguage('Redirector/Redirector');
 
     $link = ($_GET['url']);
@@ -139,7 +139,8 @@ function showRedirectorPage()
         exit;
     } // if it is in settings - use automatic redirection after delay
     elseif ($modSettings['redirector_mode'] == 'delayed') {
-        header('Refresh: ' . $modSettings['redirector_delay'] . '; url=' . mimespecialchars($link));
+        require_once ($sourcedir . '/Subs-Post.php');
+        header('Refresh: ' . $modSettings['redirector_delay'] . '; url=' . $link);
         exit;
 /*
         $context['page_title'] = $txt['redirector_page_title'];
