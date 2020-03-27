@@ -89,7 +89,6 @@ function getRedirectorUrl($url = '')
     } else {
         return $url;
     }
-
 }
 
 /**
@@ -119,7 +118,7 @@ function addRedirectorCopyright()
     global $context;
 
     if ($context['current_action'] == 'credits') {
-        $context['copyrights']['mods'][] = '<a href="https://mysmf.net/mods/redirector" target="_blank">Redirector</a> &copy; 2015-2019, digger';
+        $context['copyrights']['mods'][] = '<a href="https://mysmf.net/mods/redirector" target="_blank">Redirector</a> &copy; 2015-2020, digger';
     }
 }
 
@@ -136,20 +135,21 @@ function showRedirectorPage()
 
     if ($modSettings['redirector_mode'] == 'immediate') {
         header('Location: ' . $link);
-        exit;
-    } // if it is in settings - use automatic redirection after delay
-    elseif ($modSettings['redirector_mode'] == 'delayed') {
-        require_once ($sourcedir . '/Subs-Post.php');
+        exit();
+    } elseif ($modSettings['redirector_mode'] == 'delayed') {
         header('Refresh: ' . $modSettings['redirector_delay'] . '; url=' . $link);
-        exit;
-/*
-        $context['page_title'] = $txt['redirector_page_title'];
 
-        $context['linktree'][] = array(
-            'url' => $_SERVER['PHP_SELF'],
-            'name' => $txt['redirector_page_title'],
-        );
-*/
+        $context['page_title'] = $txt['redirector_page_title'];
+        $context['linktree'][] = array('name' => $txt['redirector_page_title']);
+
+        template_init();
+        template_header();
+        echo '<div class="information">
+			<p>' . sprintf($txt['redirector_page_text'], $modSettings['redirector_delay']) . '</p>
+			<p>' . $link . '</p>
+		</div>';
+        template_footer();
+        exit();
     }
 }
 
@@ -161,17 +161,21 @@ function changeRedirectorUrlTag(&$codes = array())
 {
     foreach ($codes as $codeId => $code) {
         if ($code['tag'] == 'url' && $code['type'] == 'unparsed_content') {
-            $codes[$codeId]['validate'] = create_function('&$tag, &$data',
-                'changeUrlUnparsedContentCode($tag, $data);');
+            $codes[$codeId]['validate'] = function (&$tag, &$data) {
+                changeUrlUnparsedContentCode($tag, $data);
+            };
         } elseif ($code['tag'] == 'url' && $code['type'] == 'unparsed_equals') {
-            $codes[$codeId]['validate'] = create_function('&$tag, &$data',
-                'changeUrlUnparsedEqualsCode($tag, $data);');
+            $codes[$codeId]['validate'] = function (&$tag, &$data) {
+                changeUrlUnparsedEqualsCode($tag, $data);
+            };
         } elseif ($code['tag'] == 'iurl' && $code['type'] == 'unparsed_content') {
-            $codes[$codeId]['validate'] = create_function('&$tag, &$data',
-                'changeUrlUnparsedContentCode($tag, $data);');
+            $codes[$codeId]['validate'] = function (&$tag, &$data) {
+                changeUrlUnparsedContentCode($tag, $data);
+            };
         } elseif ($code['tag'] == 'iurl' && $code['type'] == 'unparsed_equals') {
-            $codes[$codeId]['validate'] = create_function('&$tag, &$data',
-                'changeUrlUnparsedEqualsCode($tag, $data);');
+            $codes[$codeId]['validate'] = function (&$tag, &$data) {
+                changeUrlUnparsedEqualsCode($tag, $data);
+            };
         }
     }
 }
@@ -199,13 +203,17 @@ function changeUrlUnparsedContentCode(&$tag, &$data)
     }
 
     // Hide links from guests
-    if (!empty($modSettings['redirector_hide_guest_links']) && !empty($context['user']['is_guest']) && !checkWhiteList($data)) {
+    if (!empty($modSettings['redirector_hide_guest_links']) && !empty($context['user']['is_guest']) && !checkWhiteList(
+            $data
+        )) {
         $link_text = !empty($modSettings['redirector_hide_guest_custom_message']) ? $modSettings['redirector_hide_guest_custom_message'] : $txt['redirector_hide_guest_message'];
     }
 
     $data = getRedirectorUrl($data);
 
-    $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList($data)) ? 'rel="nofollow noopener" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
+    $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList(
+                $data
+            )) ? 'rel="nofollow noopener" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
 }
 
 /**
@@ -230,11 +238,15 @@ function changeUrlUnparsedEqualsCode(&$tag, &$data)
 
     $href = getRedirectorUrl($data);
 
-    $tag['before'] = '<a href="' . $href . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList($data)) ? 'rel="nofollow noopener" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >';
+    $tag['before'] = '<a href="' . $href . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList(
+                $data
+            )) ? 'rel="nofollow noopener" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >';
     $tag['after'] = '</a>';
 
     // Hide links from guests
-    if (!empty($modSettings['redirector_hide_guest_links']) && !empty($context['user']['is_guest']) && !checkWhiteList($data)) {
+    if (!empty($modSettings['redirector_hide_guest_links']) && !empty($context['user']['is_guest']) && !checkWhiteList(
+            $data
+        )) {
         $tag['before'] = $tag['before'] . (!empty($modSettings['redirector_hide_guest_custom_message']) ? $modSettings['redirector_hide_guest_custom_message'] : $txt['redirector_hide_guest_message']) . '[url-disabled]';
         $tag['after'] = '[/url-disabled]' . $tag['after'];
     }

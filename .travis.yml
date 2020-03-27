@@ -10,3 +10,5 @@ php:
 
 script:
   - if find . -name "*.php" -exec php -l {} 2>&1 \; | grep "syntax error, unexpected"; then exit 1; fi
+
+dist: trusty

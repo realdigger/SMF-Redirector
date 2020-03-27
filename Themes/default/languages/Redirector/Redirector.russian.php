@@ -27,3 +27,4 @@ $txt['redirector_hide_guest_message'] = '[Войдите или зарегистрируйтесь]';
 $txt['redirector_hide_guest_custom_message'] = 'Сообщение отображаемое вместо скрытой от гостя ссылки';
 $txt['whoall_go'] = 'Переходит по внешней ссылке';
 $txt['redirector_nofollow_links'] = 'Добавить к ссылкам rel="nofollow noopener"';
+$txt['redirector_page_text'] = 'Вы переходите по внешней ссылке не имеющей отношения к форуму. Переход произойдет через %d сек.';
