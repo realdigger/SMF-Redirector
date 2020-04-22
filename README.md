@@ -10,7 +10,7 @@
 * **License:** The MIT License (MIT)
 * **Hooks only:** Yes
 * **Compatible with:** SMF 2.0, SMF 2.1
-* **Languages:** English, Russian
+* **Languages:** English, Russian, French
 
 ## Installation
 Download and install latest release tar.gz file from [releases page](https://github.com/realdigger/SMF-Redirector/releases).
