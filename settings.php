@@ -32,6 +32,8 @@ $mod_settings = array(
     'redirector_whitelist' => parse_url($boardurl, PHP_URL_HOST) . "\nlink.tapatalk.com\nyoutu.be\nyoutube.com\nwww.youtube.com",
     'redirector_hide_guest_links' => 0,
     'redirector_hide_guest_custom_message' => '',
+    'redirector_page_guests_text' => '',
+    'redirector_page_members_text' => '',
 );
 
 // Update mod settings if applicable

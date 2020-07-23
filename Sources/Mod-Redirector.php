@@ -127,7 +127,7 @@ function addRedirectorCopyright()
  */
 function showRedirectorPage()
 {
-    global $modSettings, $sourcedir, $context, $txt;
+    global $modSettings, $context, $txt;
     loadLanguage('Redirector/Redirector');
 
     $link = ($_GET['url']);
@@ -142,12 +142,21 @@ function showRedirectorPage()
         $context['page_title'] = $txt['redirector_page_title'];
         $context['linktree'][] = array('name' => $txt['redirector_page_title']);
 
+        if (!empty($context['user']['is_guest']) && $modSettings['redirector_page_guests_text']) {
+            $pageText = $modSettings['redirector_page_guests_text'];
+        } elseif (empty($context['user']['is_guest']) && $modSettings['redirector_page_members_text']) {
+            $pageText = $modSettings['redirector_page_members_text'];
+        } else {
+            $pageText = $txt['redirector_page_text'];
+        }
+
+        $pageText = str_replace('{LINK}' , $link, $pageText);
+        $pageText = str_replace('{TIME}' , $modSettings['redirector_delay'], $pageText);
+
+
         template_init();
         template_header();
-        echo '<div class="information">
-			<p>' . sprintf($txt['redirector_page_text'], $modSettings['redirector_delay']) . '</p>
-			<p>' . $link . '</p>
-		</div>';
+        echo $pageText;
         template_footer();
         exit();
     }
@@ -213,7 +222,7 @@ function changeUrlUnparsedContentCode(&$tag, &$data)
 
     $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList(
                 $data
-            )) ? 'rel="nofollow noopener" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
+            )) ? 'rel="nofollow noopener noreferrer" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
 }
 
 /**
@@ -240,7 +249,7 @@ function changeUrlUnparsedEqualsCode(&$tag, &$data)
 
     $tag['before'] = '<a href="' . $href . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList(
                 $data
-            )) ? 'rel="nofollow noopener" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >';
+            )) ? 'rel="nofollow noopener noreferrer" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >';
     $tag['after'] = '</a>';
 
     // Hide links from guests

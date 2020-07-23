@@ -26,5 +26,9 @@ $txt['redirector_hide_guest_links'] = 'Hide links (except white list) for guests
 $txt['redirector_hide_guest_message'] = '[Login or Register]';
 $txt['redirector_hide_guest_custom_message'] = 'Message to show when link is hided';
 $txt['whoall_go'] = 'Go to external link';
-$txt['redirector_nofollow_links'] = 'Add rel="nofollow noopener" for links';
-$txt['redirector_page_text'] = 'You go to the external link. You will be redirected in %d sec.';
+$txt['redirector_nofollow_links'] = 'Add rel="nofollow noopener noreferrer" for links';
+$txt['redirector_page_text'] = '<div class="information"><p>You go to the external link. You will be redirected in {TIME} sec.</p><p>{LINK}</p></div>';
+$txt['redirector_page_settings_title'] = 'Redirect page';
+$txt['redirector_page_guests_text'] = 'Template for guests';
+$txt['redirector_page_members_text'] = 'Template for members';
+$txt['redirector_page_text_sub'] = 'You can use HTML tags, {link} for link url and {TIME} for seconds';

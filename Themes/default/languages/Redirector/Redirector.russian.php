@@ -26,5 +26,9 @@ $txt['redirector_hide_guest_links'] = 'Скрывать ссылки (кроме белого списка) от 
 $txt['redirector_hide_guest_message'] = '[Войдите или зарегистрируйтесь]';
 $txt['redirector_hide_guest_custom_message'] = 'Сообщение отображаемое вместо скрытой от гостя ссылки';
 $txt['whoall_go'] = 'Переходит по внешней ссылке';
-$txt['redirector_nofollow_links'] = 'Добавить к ссылкам rel="nofollow noopener"';
-$txt['redirector_page_text'] = 'Вы переходите по внешней ссылке не имеющей отношения к форуму. Переход произойдет через %d сек.';
+$txt['redirector_nofollow_links'] = 'Добавить к ссылкам rel="nofollow noopener noreferrer"';
+$txt['redirector_page_text'] = '<div class="information"><p>Вы переходите по внешней ссылке не имеющей отношения к форуму. Переход произойдет через {TIME} сек.</p><p>{LINK}</p></div>';
+$txt['redirector_page_settings_title'] = 'Страница перенаправления';
+$txt['redirector_page_guests_text'] = 'Шаблон текста для гостей';
+$txt['redirector_page_members_text'] = 'Шаблон текста для пользователей';
+$txt['redirector_page_text_sub'] = 'Можно использовать HTML тэги, {LINK} для вывода ссылки и {TIME} для отображения секунд';

@@ -27,5 +27,5 @@ $txt['redirector_hide_guest_links'] = 'Cacher les liens pour les invit&eacute;s 
 $txt['redirector_hide_guest_message'] = '[Connexion ou inscription]';
 $txt['redirector_hide_guest_custom_message'] = 'Message &agrave; afficher lorsque le lien est cach&eacute;';
 $txt['whoall_go'] = 'Suivre le lien externe';
-$txt['redirector_nofollow_links'] = 'Ajouter rel="nofollow noopener" sur les liens';
+$txt['redirector_nofollow_links'] = 'Ajouter rel="nofollow noopener noreferrer" sur les liens';
 $txt['redirector_page_text'] = 'Vous allez suivre un lien externe. Vous serez redirig&eacute; dans %d sec.';

@@ -9,7 +9,7 @@
 * **Author:** digger [http://mysmf.net](http://mysmf.net)
 * **License:** The MIT License (MIT)
 * **Hooks only:** Yes
-* **Compatible with:** SMF 2.0, SMF 2.1
+* **Compatible with:** SMF 2.0, SMF 2.1, PHP 5.4+
 * **Languages:** English, Russian, French
 
 ## Installation
