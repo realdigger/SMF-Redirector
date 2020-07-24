@@ -29,10 +29,10 @@ if (!empty($context['uninstalling'])) {
     $call = 'add_integration_function';
 }
 
-$hooks = array(
+$hooks = [
     'integrate_pre_include' => '$sourcedir/Mod-Redirector.php',
-    'integrate_pre_load' => 'loadRedirectorHooks'
-);
+    'integrate_pre_load'    => 'loadRedirectorHooks'
+];
 
 foreach ($hooks as $hook => $function) {
     $call($hook, $function);

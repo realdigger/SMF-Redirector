@@ -17,7 +17,7 @@ function addRedirectorAdminArea(&$admin_areas)
     global $txt;
     loadLanguage('Redirector/Redirector');
 
-    $admin_areas['config']['areas']['modsettings']['subsections']['redirector'] = array($txt['redirector_admin_menu']);
+    $admin_areas['config']['areas']['modsettings']['subsections']['redirector'] = [$txt['redirector_admin_menu']];
 }
 
 /**
@@ -39,33 +39,37 @@ function addRedirectorAdminSettings($return_config = false)
     global $txt, $scripturl, $context;
     loadLanguage('Redirector/Redirector');
 
-    $context['page_title'] = $txt['redirector_admin_menu'];
-    $context['post_url'] = $scripturl . '?action=admin;area=modsettings;save;sa=redirector';
+    $context['page_title']       = $txt['redirector_admin_menu'];
+    $context['post_url']         = $scripturl . '?action=admin;area=modsettings;save;sa=redirector';
     $context['settings_message'] = $txt['redirector_description'];
 
-    $config_vars = array(
-        array('title', 'redirector_admin_menu'),
-        array('check', 'redirector_enabled'),
-        array('check', 'redirector_nofollow_links'),
-        array('check', 'redirector_guest_only'),
-
-        array(
+    $config_vars = [
+        ['title', 'redirector_admin_menu'],
+        ['check', 'redirector_enabled'],
+        ['check', 'redirector_guest_only'],
+        ['check', 'redirector_check_referrer', 'subtext' => $txt['redirector_check_referrer_sub']],
+        [
             'select',
             'redirector_mode',
-            array(
+            [
                 'immediate' => $txt['redirector_mode_immediate'],
-                'delayed' => $txt['redirector_mode_delayed'],
-            ),
-        ),
-        array('int', 'redirector_delay'),
-        array('large_text', 'redirector_whitelist', 'subtext' => $txt['redirector_whitelist_sub']),
-        array('title', 'redirector_page_settings_title'),
-        array('large_text', 'redirector_page_members_text', 'subtext' => $txt['redirector_page_text_sub']),
-        array('large_text', 'redirector_page_guests_text', 'subtext' => $txt['redirector_page_text_sub']),
-        array('title', 'redirector_hide_links_title'),
-        array('check', 'redirector_hide_guest_links'),
-        array('large_text', 'redirector_hide_guest_custom_message'),
-    );
+                'delayed'   => $txt['redirector_mode_delayed'],
+            ],
+        ],
+        ['int', 'redirector_delay'],
+        ['large_text', 'redirector_whitelist', 'subtext' => $txt['redirector_whitelist_sub']],
+
+        ['title', 'redirector_page_settings_title'],
+        ['large_text', 'redirector_page_members_text', 'subtext' => $txt['redirector_page_text_sub']],
+        ['large_text', 'redirector_page_guests_text', 'subtext' => $txt['redirector_page_text_sub']],
+
+        ['title', 'redirector_hide_links_title'],
+        ['check', 'redirector_hide_guest_links'],
+        ['large_text', 'redirector_hide_guest_custom_message'],
+
+        ['title', 'redirector_extra_title'],
+        ['check', 'redirector_nofollow_links', 'subtext' => $txt['redirector_nofollow_links_sub']],
+    ];
 
     if ($return_config) {
         return $config_vars;

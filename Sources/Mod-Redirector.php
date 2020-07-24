@@ -25,7 +25,9 @@ function loadRedirectorHooks()
     add_integration_function('integrate_admin_areas', 'addRedirectorAdminArea', false);
     add_integration_function('integrate_modify_modifications', 'addRedirectorAdminAction', false);
 
-    if (empty($modSettings['redirector_enabled']) && empty($modSettings['redirector_hide_guest_links']) && empty($modSettings['redirector_nofollow_links'])) {
+    if (empty($modSettings['redirector_enabled']) &&
+        empty($modSettings['redirector_hide_guest_links']) &&
+        empty($modSettings['redirector_nofollow_links'])) {
         return;
     }
 
@@ -40,9 +42,9 @@ function loadRedirectorHooks()
  * Add action for redirect page
  * @param array $actionArray
  */
-function addRedirectorAction(&$actionArray = array())
+function addRedirectorAction(&$actionArray = [])
 {
-    $actionArray['go'] = array('Mod-Redirector.php', 'showRedirectorPage');
+    $actionArray['go'] = ['Mod-Redirector.php', 'showRedirectorPage'];
 }
 
 /**
@@ -101,7 +103,7 @@ function checkWhiteList($url = '')
     global $modSettings;
 
     $whitelist = array_map('trim', explode("\n", $modSettings['redirector_whitelist']));
-    $host = parse_url($url, PHP_URL_HOST);
+    $host      = parse_url($url, PHP_URL_HOST);
 
     if (!empty($host) && is_array($whitelist) && in_array($host, $whitelist)) {
         return true;
@@ -123,24 +125,30 @@ function addRedirectorCopyright()
 }
 
 /**
- * Show redirect page
+ * Check redirect mode & show redirect page
  */
 function showRedirectorPage()
 {
-    global $modSettings, $context, $txt;
+    global $modSettings, $context, $txt, $boardurl;
     loadLanguage('Redirector/Redirector');
 
     $link = ($_GET['url']);
     $link = str_replace('&amp;', '&', base64_decode($link));
 
-    if ($modSettings['redirector_mode'] == 'immediate') {
+    // Check referrer
+    if (!empty($modSettings['redirector_check_referrer']) && parse_url(
+            $_SERVER['HTTP_REFERER'],
+            PHP_URL_HOST
+        ) != $_SERVER['HTTP_HOST']) {
+        header('Location: ' . $boardurl);
+    } elseif ($modSettings['redirector_mode'] == 'immediate') {
         header('Location: ' . $link);
         exit();
     } elseif ($modSettings['redirector_mode'] == 'delayed') {
         header('Refresh: ' . $modSettings['redirector_delay'] . '; url=' . $link);
 
         $context['page_title'] = $txt['redirector_page_title'];
-        $context['linktree'][] = array('name' => $txt['redirector_page_title']);
+        $context['linktree'][] = ['name' => $txt['redirector_page_title']];
 
         if (!empty($context['user']['is_guest']) && $modSettings['redirector_page_guests_text']) {
             $pageText = $modSettings['redirector_page_guests_text'];
@@ -150,8 +158,8 @@ function showRedirectorPage()
             $pageText = $txt['redirector_page_text'];
         }
 
-        $pageText = str_replace('{LINK}' , $link, $pageText);
-        $pageText = str_replace('{TIME}' , $modSettings['redirector_delay'], $pageText);
+        $pageText = str_replace('{LINK}', $link, $pageText);
+        $pageText = str_replace('{TIME}', $modSettings['redirector_delay'], $pageText);
 
 
         template_init();
@@ -166,7 +174,7 @@ function showRedirectorPage()
  * Change default url and iurl tags
  * @param array $codes default BB-codes array
  */
-function changeRedirectorUrlTag(&$codes = array())
+function changeRedirectorUrlTag(&$codes = [])
 {
     foreach ($codes as $codeId => $code) {
         if ($code['tag'] == 'url' && $code['type'] == 'unparsed_content') {
@@ -199,7 +207,7 @@ function changeUrlUnparsedContentCode(&$tag, &$data)
     global $txt, $modSettings, $context;
     loadLanguage('Redirector/Redirector');
 
-    $data = strtr($data, array('<br />' => ''));
+    $data      = strtr($data, ['<br />' => '']);
     $link_text = $data;
 
     // Skip local urls with #
@@ -220,7 +228,7 @@ function changeUrlUnparsedContentCode(&$tag, &$data)
 
     $data = getRedirectorUrl($data);
 
-    $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList(
+    $tag['content'] = '<a href="' . $data . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && $modSettings['redirector_mode'] == 'immediate' && !checkWhiteList(
                 $data
             )) ? 'rel="nofollow noopener noreferrer" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >' . $link_text . '</a>';
 }
@@ -247,17 +255,17 @@ function changeUrlUnparsedEqualsCode(&$tag, &$data)
 
     $href = getRedirectorUrl($data);
 
-    $tag['before'] = '<a href="' . $href . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && !checkWhiteList(
+    $tag['before'] = '<a href="' . $href . '" class="bbc_link" ' . ((!empty($modSettings['redirector_nofollow_links']) && $modSettings['redirector_mode'] == 'immediate' && !checkWhiteList(
                 $data
             )) ? 'rel="nofollow noopener noreferrer" ' : '') . ($tag['tag'] == 'url' ? 'target="_blank"' : '') . ' >';
-    $tag['after'] = '</a>';
+    $tag['after']  = '</a>';
 
     // Hide links from guests
     if (!empty($modSettings['redirector_hide_guest_links']) && !empty($context['user']['is_guest']) && !checkWhiteList(
             $data
         )) {
         $tag['before'] = $tag['before'] . (!empty($modSettings['redirector_hide_guest_custom_message']) ? $modSettings['redirector_hide_guest_custom_message'] : $txt['redirector_hide_guest_message']) . '[url-disabled]';
-        $tag['after'] = '[/url-disabled]' . $tag['after'];
+        $tag['after']  = '[/url-disabled]' . $tag['after'];
     }
 }
 

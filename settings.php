@@ -24,22 +24,26 @@ if ((SMF == 'SSI') && !$user_info['is_admin']) {
 }
 
 // List settings here in the format: setting_key => default_value.  Escape any "s. (" => \")
-$mod_settings = array(
-    'redirector_enabled' => 0,
-    'redirector_guest_only' => 0,
-    'redirector_mode' => 'immediate',
-    'redirector_delay' => 5,
-    'redirector_whitelist' => parse_url($boardurl, PHP_URL_HOST) . "\nlink.tapatalk.com\nyoutu.be\nyoutube.com\nwww.youtube.com",
-    'redirector_hide_guest_links' => 0,
+$mod_settings = [
+    'redirector_enabled'                   => 0,
+    'redirector_guest_only'                => 0,
+    'redirector_mode'                      => 'immediate',
+    'redirector_delay'                     => 5,
+    'redirector_whitelist'                 => parse_url(
+            $boardurl,
+            PHP_URL_HOST
+        ) . "\nlink.tapatalk.com\nyoutu.be\nyoutube.com\nwww.youtube.com",
+    'redirector_hide_guest_links'          => 0,
     'redirector_hide_guest_custom_message' => '',
-    'redirector_page_guests_text' => '',
-    'redirector_page_members_text' => '',
-);
+    'redirector_page_guests_text'          => '',
+    'redirector_page_members_text'         => '',
+    'redirector_check_referrer'            => 0,
+];
 
 // Update mod settings if applicable
 foreach ($mod_settings as $new_setting => $new_value) {
     if (!isset($modSettings[$new_setting])) {
-        updateSettings(array($new_setting => $new_value));
+        updateSettings([$new_setting => $new_value]);
     }
 }
 
