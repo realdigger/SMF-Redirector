@@ -36,18 +36,23 @@ function addRedirectorAdminAction(&$subActions)
  */
 function addRedirectorAdminSettings($return_config = false)
 {
-    global $txt, $scripturl, $context;
+    global $txt, $scripturl, $context, $modSettings, $smcFunc;
     loadLanguage('Redirector/Redirector');
 
     $context['page_title']       = $txt['redirector_admin_menu'];
     $context['post_url']         = $scripturl . '?action=admin;area=modsettings;save;sa=redirector';
-    $context['settings_message'] = $txt['redirector_description'];
+    $context['settings_message'] = str_replace(
+        '{ACTION}',
+        (!empty($modSettings['redirector_action_name']) ? $smcFunc['htmlspecialchars'](
+            trim($modSettings['redirector_action_name'])
+        ) : 'go'),
+        $txt['redirector_description']
+    );
 
     $config_vars = [
         ['title', 'redirector_admin_menu'],
         ['check', 'redirector_enabled'],
         ['check', 'redirector_guest_only'],
-        ['check', 'redirector_check_referrer', 'subtext' => $txt['redirector_check_referrer_sub']],
         [
             'select',
             'redirector_mode',
@@ -58,6 +63,11 @@ function addRedirectorAdminSettings($return_config = false)
         ],
         ['int', 'redirector_delay'],
         ['large_text', 'redirector_whitelist', 'subtext' => $txt['redirector_whitelist_sub']],
+
+        ['title', 'redirector_protection_title'],
+        ['check', 'redirector_check_referrer', 'subtext' => $txt['redirector_check_sub']],
+        ['check', 'redirector_check_session', 'subtext' => $txt['redirector_check_sub']],
+        ['text', 'redirector_action_name', 'subtext' => $txt['redirector_action_name_sub']],
 
         ['title', 'redirector_page_settings_title'],
         ['large_text', 'redirector_page_members_text', 'subtext' => $txt['redirector_page_text_sub']],

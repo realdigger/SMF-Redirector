@@ -31,6 +31,7 @@ function loadRedirectorHooks()
         return;
     }
 
+    add_integration_function('integrate_pre_load', 'addSessionKey', false);
     add_integration_function('integrate_actions', 'addRedirectorAction', false);
     add_integration_function('integrate_menu_buttons', 'addRedirectorForUsers', false);
     add_integration_function('integrate_bbc_codes', 'changeRedirectorUrlTag', false);
@@ -44,7 +45,15 @@ function loadRedirectorHooks()
  */
 function addRedirectorAction(&$actionArray = [])
 {
-    $actionArray['go'] = ['Mod-Redirector.php', 'showRedirectorPage'];
+    global $modSettings, $smcFunc;
+
+    if (!empty($modSettings['redirector_action_name'])) {
+        $action = $smcFunc['htmlspecialchars'](trim($modSettings['redirector_action_name']));
+    } else {
+        $action = 'go';
+    }
+
+    $actionArray[$action] = ['Mod-Redirector.php', 'showRedirectorPage'];
 }
 
 /**
@@ -72,7 +81,7 @@ function addRedirectorForUsers()
  */
 function getRedirectorUrl($url = '')
 {
-    global $scripturl, $modSettings, $context;
+    global $scripturl, $modSettings, $context, $smcFunc;
 
     if (!empty($modSettings['redirector_guest_only']) && empty($context['user']['is_guest'])) {
         return $url;
@@ -86,8 +95,14 @@ function getRedirectorUrl($url = '')
         return $scripturl . '?action=login';
     }
 
+    if (!empty($modSettings['redirector_action_name'])) {
+        $action = $smcFunc['htmlspecialchars'](trim($modSettings['redirector_action_name']));
+    } else {
+        $action = 'go';
+    }
+
     if (!empty($modSettings['redirector_enabled'])) {
-        return $scripturl . '?action=go;url=' . (base64_encode($url));
+        return $scripturl . '?action=' . $action . ';url=' . (base64_encode($url));
     } else {
         return $url;
     }
@@ -102,8 +117,10 @@ function checkWhiteList($url = '')
 {
     global $modSettings;
 
-    $whitelist = array_map('trim', explode("\n", $modSettings['redirector_whitelist']));
-    $host      = parse_url($url, PHP_URL_HOST);
+    // TODO Get sites from Simple Audio Video Embedder
+    $whitelist   = array_map('trim', explode("\n", $modSettings['redirector_whitelist']));
+    $whitelist[] = $_SERVER['HTTP_HOST'];
+    $host        = parse_url($url, PHP_URL_HOST);
 
     if (!empty($host) && is_array($whitelist) && in_array($host, $whitelist)) {
         return true;
@@ -120,7 +137,7 @@ function addRedirectorCopyright()
     global $context;
 
     if ($context['current_action'] == 'credits') {
-        $context['copyrights']['mods'][] = '<a href="https://mysmf.net/mods/redirector" target="_blank">Redirector</a> &copy; 2015-2020, digger';
+        $context['copyrights']['mods'][] = '<a href="https://mysmf.net/mods/redirector" target="_blank">Redirector</a> &copy; 2015-2023, digger';
     }
 }
 
@@ -129,30 +146,34 @@ function addRedirectorCopyright()
  */
 function showRedirectorPage()
 {
-    global $modSettings, $context, $txt, $boardurl;
-    loadLanguage('Redirector/Redirector');
+    global $modSettings, $context, $txt;
 
     $link = ($_GET['url']);
     $link = str_replace('&amp;', '&', base64_decode($link));
 
-    // Check referrer
-    if (!empty($modSettings['redirector_check_referrer']) && parse_url(
+    if (empty($modSettings['redirector_enabled'])) {
+        header('HTTP/1.1 404 Not Found');
+        exit();
+    } // Check referrer
+    elseif (!empty($modSettings['redirector_check_referrer']) && parse_url(
             $_SERVER['HTTP_REFERER'],
             PHP_URL_HOST
         ) != $_SERVER['HTTP_HOST']) {
-        header('Location: ' . $boardurl);
+        header('HTTP/1.0 404 Not Found', true);
+        exit();
     } elseif ($modSettings['redirector_mode'] == 'immediate') {
         header('Location: ' . $link);
         exit();
     } elseif ($modSettings['redirector_mode'] == 'delayed') {
+        loadLanguage('Redirector/Redirector');
         header('Refresh: ' . $modSettings['redirector_delay'] . '; url=' . $link);
 
         $context['page_title'] = $txt['redirector_page_title'];
         $context['linktree'][] = ['name' => $txt['redirector_page_title']];
 
-        if (!empty($context['user']['is_guest']) && $modSettings['redirector_page_guests_text']) {
+        if (!empty($context['user']['is_guest']) && !empty($modSettings['redirector_page_guests_text'])) {
             $pageText = $modSettings['redirector_page_guests_text'];
-        } elseif (empty($context['user']['is_guest']) && $modSettings['redirector_page_members_text']) {
+        } elseif (empty($context['user']['is_guest']) && !empty($modSettings['redirector_page_members_text'])) {
             $pageText = $modSettings['redirector_page_members_text'];
         } else {
             $pageText = $txt['redirector_page_text'];

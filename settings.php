@@ -38,6 +38,8 @@ $mod_settings = [
     'redirector_page_guests_text'          => '',
     'redirector_page_members_text'         => '',
     'redirector_check_referrer'            => 0,
+    'redirector_check_session'             => 0,
+    'redirector_action_name'               => '',
 ];
 
 // Update mod settings if applicable

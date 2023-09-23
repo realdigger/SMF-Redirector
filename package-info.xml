@@ -7,10 +7,19 @@
     <type>modification</type>
     <version>1.2.7</version>
 
-    <install for="2.0 - 2.1.99">
+    <install for="2.0 - 2.0.99">
         <readme parsebbc="true">README.bbc</readme>
-        <require-dir name="Themes" destination="$boarddir"/>
         <require-dir name="Sources" destination="$boarddir"/>
+        <require-dir name="Themes" destination="$boarddir"/>
+        <database>settings.php</database>
+        <database>hooks.php</database>
+        <redirect url="?action=admin;area=modsettings;sa=redirector"/>
+    </install>
+
+    <install for="2.1 - 2.1.99">
+        <readme parsebbc="true">README.bbc</readme>
+        <require-dir name="Sources" destination="$boarddir"/>
+        <require-dir name="Themes_2.1/Redirector" destination="$languagedir"/>
         <database>settings.php</database>
         <database>hooks.php</database>
         <redirect url="?action=admin;area=modsettings;sa=redirector"/>
@@ -20,7 +29,7 @@
         <remove-dir name="$languagedir/Redirector"/>
         <remove-file name="$sourcedir/Mod-Redirector.php"/>
         <remove-file name="$sourcedir/Admin-Redirector.php"/>
-        <code>hooks.php</code>
+        <database>hooks.php</database>
     </uninstall>
 
 </package-info>
